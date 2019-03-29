@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 
 public class BST<Comparable> {
-    BSTNode root;
-    int size;
+    private static int maxStringLimit = 10; //Change this to make toString look better
+    private BSTNode root;
+    private int size;
+
     public BST(Comparable data) {
         root = new BSTNode<Comparable>(data);
     }
@@ -75,12 +77,19 @@ public class BST<Comparable> {
     }
 
     public String toString() {
+        return toString(maxStringLimit);
+    }
+
+    public String toString(int stringPerLine) {
         Comparable[] array = toArray();
         String display = "[";
         for (int i = 0; i < array.length; i++) {
             display += array[i];
             if (i < array.length - 1)
                 display += ", ";
+            if (stringPerLine > 0 && (i+1) % stringPerLine == 0)
+                display += "\n";
+
         }
         display += "]";
         return display;
@@ -102,6 +111,10 @@ public class BST<Comparable> {
         }
     }
 
+    public int size() {
+        return size;
+    }
+
 //    public void print() {
 //        System.out.print("[");
 //        print(root);
@@ -116,10 +129,9 @@ public class BST<Comparable> {
 //    }
 
 
-
     /**
-     *
-     * @param <Comparable>
+     * Janky helper method for BST.java (Binary Search Tree)
+     * @param <Comparable> Stored data type
      */
     private class BSTNode<Comparable>{
         BSTNode left, right;
@@ -132,9 +144,7 @@ public class BST<Comparable> {
 
         @SuppressWarnings("unchecked")
         public int compareTo(BSTNode other) throws ClassCastException{
-            if (!(data instanceof java.lang.Comparable) || !(other.data instanceof java.lang.Comparable))
-                throw new ClassCastException();
-            return ((java.lang.Comparable)data).compareTo(other.data);
+            return compareTo((Comparable)other.data);
         }
 
         @SuppressWarnings("unchecked")

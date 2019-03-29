@@ -105,8 +105,8 @@ public class Practice08Test {
 	
 	
 	public boolean orderTest() {
-		String fromWikipedia = "Grace Brewster Murray Hopper (née Murray December 9, 1906 – January 1, 1992) ";// +
-			/*
+		String fromWikipedia = "Grace Brewster Murray Hopper (née Murray December 9, 1906 – January 1, 1992) ";/*+
+
  				"was an American computer scientist and United States Navy rear admiral. One of the first " +
 				"programmers of the Harvard Mark I computer, she was a pioneer of computer programming who " +
 				"invented one of the first linkers. She popularized the idea of machine-independent programming " +
@@ -121,8 +121,8 @@ public class Practice08Test {
 				"She believed that a programming language based on English was possible. Her compiler converted " +
 				"English terms into machine code understood by computers. By 1952, Hopper had finished her program " +
 				"linker (originally called a compiler), which was written for the A-0 System. During her wartime " +
-				"service, she co-authored three papers based on her work on the Harvard Mark 1.";
-			*/
+				"service, she co-authored three papers based on her work on the Harvard Mark 1.";//*/
+
 		
 		BST<String> bst = new BST<String>();String delims = " (,.)";
 		
