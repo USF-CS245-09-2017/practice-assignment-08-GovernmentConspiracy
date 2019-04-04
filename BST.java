@@ -1,7 +1,13 @@
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class BST<Comparable> {
-    private static int maxStringLimit = 10; //Change this to make toString look better
+    /**
+     * Number of Comparables objects in each line of toString().
+     * 0 to use only 1 line.
+     */
+    private static int maxStringLimit = 0;
+
     private BSTNode root;
     private int size;
 
@@ -27,21 +33,26 @@ public class BST<Comparable> {
         return find(node.right, designation);
     }
 
+    public void insert(Collection<Comparable> list) {
+        for (Comparable part: list)
+            insert(part);
+    }
+
     @SuppressWarnings("unchecked")
-    public void insert(Comparable data) {
-        root = insert(root, new BSTNode(data));
+    public void insert(Comparable designation) {
+        root = insert(root, designation);
         size++;
     }
     @SuppressWarnings("unchecked")
-    private BSTNode<Comparable> insert(BSTNode node, BSTNode temp) {
+    private BSTNode<Comparable> insert(BSTNode node, Comparable designation) {
         if (node == null) {
-            return temp;
+            return new BSTNode(designation);
         }
-        if (temp.compareTo(node) < 0) {
-            node.left = insert(node.left, temp);
+        if (node.compareTo(designation) >= 0) {
+            node.left = insert(node.left, designation);
         }
         else {
-            node.right = insert(node.right, temp);
+            node.right = insert(node.right, designation);
         }
         return node;
     }
@@ -60,14 +71,32 @@ public class BST<Comparable> {
             return null;
         if (node.compareTo(designation) == 0) {
             size--;
-            if (node.right != null)
+            if (node.left == null)
                 return node.right;
-            return node.left;
+            if (node.right == null)
+                return node.left;
+            //needs inOrderSuccessor
+            BSTNode temp = getLeftmost(node.right);
+            node = delete(node, (Comparable)(temp.data));
+            size++; //replaces the lost size from 2nd call.
+            temp.left = node.left;
+            temp.right = node.right;
+            return temp;
         }
-        if ((node.compareTo(designation) > 0))
-            node = delete(node.left, designation);
+        else if ((node.compareTo(designation) > 0))
+            node.left = delete(node.left, designation);
         else
-            node = delete(node.right, designation);
+            node.right = delete(node.right, designation);
+        return node;
+    }
+
+    private BSTNode inOrderSuccessor(BSTNode node) {
+        return getLeftmost(node.right);
+    }
+
+    private BSTNode getLeftmost(BSTNode node) {
+        if (node.left != null)
+            return getLeftmost(node.left);
         return node;
     }
 
@@ -83,15 +112,17 @@ public class BST<Comparable> {
     public String toString(int stringPerLine) {
         Comparable[] array = toArray();
         String display = "[";
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < array.length - 1; i++) {
             display += array[i];
-            if (i < array.length - 1)
+
                 display += ", ";
-            if (stringPerLine > 0 && (i+1) % stringPerLine == 0)
-                display += "\n";
+                if (stringPerLine > 0 && (i + 1) % stringPerLine == 0)
+                    display += "\n";
 
         }
-        display += "]";
+        if (array.length != 0)
+            display += array[array.length-1];
+        display +=  "]";
         return display;
     }
 
